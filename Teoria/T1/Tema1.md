@@ -2,9 +2,9 @@
 
 **Caracteristicas / Objetivos emergentes**
 
-> Calidad de servicio:
+- Calidad de servicio:
     Relacionado con las comunicaciones, latencias...
-> Movilidad: 
+-  Movilidad: 
     Los sistemas moviles permiten la economía bajo demanda
-> Amigabilidad de las interfaces
-> Elasticidad y Escalabilidad
+-  Amigabilidad de las interfaces
+-  Elasticidad y Escalabilidad
