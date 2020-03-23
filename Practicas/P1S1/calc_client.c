@@ -22,6 +22,10 @@ calculadora_1(char *host, float arg1, char op, float arg2)
 	}
 #endif	/* DEBUG */
 
+	if(arg2 == 0 && op == '/'){
+		printf("Se esta sucediendo algun tipo de error\n");
+		return -1;
+	}
 	switch (op)
 	{
 	case '+':
