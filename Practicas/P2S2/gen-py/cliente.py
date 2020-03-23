@@ -28,8 +28,22 @@ def main():
     transport.open()
 
     # Realizamos las operaciones
-    print('Hago ping al servidor')
     client.ping()
+
+    arg1 = sys.argv[1]
+    arg2 = sys.argv[3]
+    
+
+    if len(sys.argv) != 4:
+        print('Usage: python cliente.py arg1 operator arg2')
+    else:
+        if sys.argv[2] == '+':
+            print('Voy a sumar ' + arg1 + ' y ' + arg2 + '...')
+            resultado = client.suma(arg1, arg2)
+            # print('Resultado: ' + resultado)
+
+
+        
 
     
 
