@@ -30,17 +30,34 @@ def main():
     # Realizamos las operaciones
     client.ping()
 
-    arg1 = sys.argv[1]
-    arg2 = sys.argv[3]
+    
     
 
     if len(sys.argv) != 4:
-        print('Usage: python cliente.py arg1 operator arg2')
+        print('Usage: python cliente.py arg1 [ + | - | x | / ] arg2')
     else:
+        arg1 = int(sys.argv[1])
+        arg2 = int(sys.argv[3])
+
         if sys.argv[2] == '+':
-            print('Voy a sumar ' + arg1 + ' y ' + arg2 + '...')
+            print('Voy a sumar ' + sys.argv[1] + ' y ' + sys.argv[3] + '...')
             resultado = client.suma(arg1, arg2)
-            # print('Resultado: ' + resultado)
+            print('Resultado: ' + str(resultado))
+        if sys.argv[2] == '-':
+            print('Voy a restar ' + sys.argv[1] + ' y ' + sys.argv[3] + '...')
+            resultado = client.sub(arg1, arg2)
+            print('Resultado: ' + str(resultado))
+        if sys.argv[2] == 'x':
+            print('Voy a multiplicar ' + sys.argv[1] + ' y ' + sys.argv[3] + '...')
+            resultado = client.mult(arg1, arg2)
+            print('Resultado: ' + str(resultado))
+        if sys.argv[2] == '/':
+            if arg2 != 0:
+                print('Voy a dividir ' + sys.argv[1] + ' entre ' + sys.argv[3] + '...')
+                resultado = client.div(arg1, arg2)
+                print('Resultado: ' + str(resultado))
+            else:
+                print('ERROR: no se puede dividir entre 0')
 
 
         
