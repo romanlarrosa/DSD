@@ -53,6 +53,30 @@ class Iface:
     """
     pass
 
+  def sumVec(self, vec1, vec2):
+    """
+    Parameters:
+     - vec1
+     - vec2
+    """
+    pass
+
+  def subVec(self, vec1, vec2):
+    """
+    Parameters:
+     - vec1
+     - vec2
+    """
+    pass
+
+  def escVec(self, vec1, vec2):
+    """
+    Parameters:
+     - vec1
+     - vec2
+    """
+    pass
+
 
 class Client(Iface):
   def __init__(self, iprot, oprot=None):
@@ -212,6 +236,102 @@ class Client(Iface):
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "div failed: unknown result");
 
+  def sumVec(self, vec1, vec2):
+    """
+    Parameters:
+     - vec1
+     - vec2
+    """
+    self.send_sumVec(vec1, vec2)
+    return self.recv_sumVec()
+
+  def send_sumVec(self, vec1, vec2):
+    self._oprot.writeMessageBegin('sumVec', TMessageType.CALL, self._seqid)
+    args = sumVec_args()
+    args.vec1 = vec1
+    args.vec2 = vec2
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_sumVec(self):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = sumVec_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "sumVec failed: unknown result");
+
+  def subVec(self, vec1, vec2):
+    """
+    Parameters:
+     - vec1
+     - vec2
+    """
+    self.send_subVec(vec1, vec2)
+    return self.recv_subVec()
+
+  def send_subVec(self, vec1, vec2):
+    self._oprot.writeMessageBegin('subVec', TMessageType.CALL, self._seqid)
+    args = subVec_args()
+    args.vec1 = vec1
+    args.vec2 = vec2
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_subVec(self):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = subVec_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "subVec failed: unknown result");
+
+  def escVec(self, vec1, vec2):
+    """
+    Parameters:
+     - vec1
+     - vec2
+    """
+    self.send_escVec(vec1, vec2)
+    return self.recv_escVec()
+
+  def send_escVec(self, vec1, vec2):
+    self._oprot.writeMessageBegin('escVec', TMessageType.CALL, self._seqid)
+    args = escVec_args()
+    args.vec1 = vec1
+    args.vec2 = vec2
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_escVec(self):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = escVec_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "escVec failed: unknown result");
+
 
 class Processor(Iface, TProcessor):
   def __init__(self, handler):
@@ -222,6 +342,9 @@ class Processor(Iface, TProcessor):
     self._processMap["sub"] = Processor.process_sub
     self._processMap["mult"] = Processor.process_mult
     self._processMap["div"] = Processor.process_div
+    self._processMap["sumVec"] = Processor.process_sumVec
+    self._processMap["subVec"] = Processor.process_subVec
+    self._processMap["escVec"] = Processor.process_escVec
 
   def process(self, iprot, oprot):
     (name, type, seqid) = iprot.readMessageBegin()
@@ -289,6 +412,39 @@ class Processor(Iface, TProcessor):
     result = div_result()
     result.success = self._handler.div(args.num1, args.num2)
     oprot.writeMessageBegin("div", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_sumVec(self, seqid, iprot, oprot):
+    args = sumVec_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = sumVec_result()
+    result.success = self._handler.sumVec(args.vec1, args.vec2)
+    oprot.writeMessageBegin("sumVec", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_subVec(self, seqid, iprot, oprot):
+    args = subVec_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = subVec_result()
+    result.success = self._handler.subVec(args.vec1, args.vec2)
+    oprot.writeMessageBegin("subVec", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_escVec(self, seqid, iprot, oprot):
+    args = escVec_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = escVec_result()
+    result.success = self._handler.escVec(args.vec1, args.vec2)
+    oprot.writeMessageBegin("escVec", TMessageType.REPLY, seqid)
     result.write(oprot)
     oprot.writeMessageEnd()
     oprot.trans.flush()
@@ -389,8 +545,8 @@ class suma_args:
 
   thrift_spec = (
     None, # 0
-    (1, TType.I32, 'num1', None, None, ), # 1
-    (2, TType.I32, 'num2', None, None, ), # 2
+    (1, TType.DOUBLE, 'num1', None, None, ), # 1
+    (2, TType.DOUBLE, 'num2', None, None, ), # 2
   )
 
   def __init__(self, num1=None, num2=None,):
@@ -407,13 +563,13 @@ class suma_args:
       if ftype == TType.STOP:
         break
       if fid == 1:
-        if ftype == TType.I32:
-          self.num1 = iprot.readI32();
+        if ftype == TType.DOUBLE:
+          self.num1 = iprot.readDouble();
         else:
           iprot.skip(ftype)
       elif fid == 2:
-        if ftype == TType.I32:
-          self.num2 = iprot.readI32();
+        if ftype == TType.DOUBLE:
+          self.num2 = iprot.readDouble();
         else:
           iprot.skip(ftype)
       else:
@@ -427,12 +583,12 @@ class suma_args:
       return
     oprot.writeStructBegin('suma_args')
     if self.num1 is not None:
-      oprot.writeFieldBegin('num1', TType.I32, 1)
-      oprot.writeI32(self.num1)
+      oprot.writeFieldBegin('num1', TType.DOUBLE, 1)
+      oprot.writeDouble(self.num1)
       oprot.writeFieldEnd()
     if self.num2 is not None:
-      oprot.writeFieldBegin('num2', TType.I32, 2)
-      oprot.writeI32(self.num2)
+      oprot.writeFieldBegin('num2', TType.DOUBLE, 2)
+      oprot.writeDouble(self.num2)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
@@ -459,7 +615,7 @@ class suma_result:
   """
 
   thrift_spec = (
-    (0, TType.I32, 'success', None, None, ), # 0
+    (0, TType.DOUBLE, 'success', None, None, ), # 0
   )
 
   def __init__(self, success=None,):
@@ -475,8 +631,8 @@ class suma_result:
       if ftype == TType.STOP:
         break
       if fid == 0:
-        if ftype == TType.I32:
-          self.success = iprot.readI32();
+        if ftype == TType.DOUBLE:
+          self.success = iprot.readDouble();
         else:
           iprot.skip(ftype)
       else:
@@ -490,8 +646,8 @@ class suma_result:
       return
     oprot.writeStructBegin('suma_result')
     if self.success is not None:
-      oprot.writeFieldBegin('success', TType.I32, 0)
-      oprot.writeI32(self.success)
+      oprot.writeFieldBegin('success', TType.DOUBLE, 0)
+      oprot.writeDouble(self.success)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
@@ -520,8 +676,8 @@ class sub_args:
 
   thrift_spec = (
     None, # 0
-    (1, TType.I32, 'num1', None, None, ), # 1
-    (2, TType.I32, 'num2', None, None, ), # 2
+    (1, TType.DOUBLE, 'num1', None, None, ), # 1
+    (2, TType.DOUBLE, 'num2', None, None, ), # 2
   )
 
   def __init__(self, num1=None, num2=None,):
@@ -538,13 +694,13 @@ class sub_args:
       if ftype == TType.STOP:
         break
       if fid == 1:
-        if ftype == TType.I32:
-          self.num1 = iprot.readI32();
+        if ftype == TType.DOUBLE:
+          self.num1 = iprot.readDouble();
         else:
           iprot.skip(ftype)
       elif fid == 2:
-        if ftype == TType.I32:
-          self.num2 = iprot.readI32();
+        if ftype == TType.DOUBLE:
+          self.num2 = iprot.readDouble();
         else:
           iprot.skip(ftype)
       else:
@@ -558,12 +714,12 @@ class sub_args:
       return
     oprot.writeStructBegin('sub_args')
     if self.num1 is not None:
-      oprot.writeFieldBegin('num1', TType.I32, 1)
-      oprot.writeI32(self.num1)
+      oprot.writeFieldBegin('num1', TType.DOUBLE, 1)
+      oprot.writeDouble(self.num1)
       oprot.writeFieldEnd()
     if self.num2 is not None:
-      oprot.writeFieldBegin('num2', TType.I32, 2)
-      oprot.writeI32(self.num2)
+      oprot.writeFieldBegin('num2', TType.DOUBLE, 2)
+      oprot.writeDouble(self.num2)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
@@ -590,7 +746,7 @@ class sub_result:
   """
 
   thrift_spec = (
-    (0, TType.I32, 'success', None, None, ), # 0
+    (0, TType.DOUBLE, 'success', None, None, ), # 0
   )
 
   def __init__(self, success=None,):
@@ -606,8 +762,8 @@ class sub_result:
       if ftype == TType.STOP:
         break
       if fid == 0:
-        if ftype == TType.I32:
-          self.success = iprot.readI32();
+        if ftype == TType.DOUBLE:
+          self.success = iprot.readDouble();
         else:
           iprot.skip(ftype)
       else:
@@ -621,8 +777,8 @@ class sub_result:
       return
     oprot.writeStructBegin('sub_result')
     if self.success is not None:
-      oprot.writeFieldBegin('success', TType.I32, 0)
-      oprot.writeI32(self.success)
+      oprot.writeFieldBegin('success', TType.DOUBLE, 0)
+      oprot.writeDouble(self.success)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
@@ -651,8 +807,8 @@ class mult_args:
 
   thrift_spec = (
     None, # 0
-    (1, TType.I32, 'num1', None, None, ), # 1
-    (2, TType.I32, 'num2', None, None, ), # 2
+    (1, TType.DOUBLE, 'num1', None, None, ), # 1
+    (2, TType.DOUBLE, 'num2', None, None, ), # 2
   )
 
   def __init__(self, num1=None, num2=None,):
@@ -669,13 +825,13 @@ class mult_args:
       if ftype == TType.STOP:
         break
       if fid == 1:
-        if ftype == TType.I32:
-          self.num1 = iprot.readI32();
+        if ftype == TType.DOUBLE:
+          self.num1 = iprot.readDouble();
         else:
           iprot.skip(ftype)
       elif fid == 2:
-        if ftype == TType.I32:
-          self.num2 = iprot.readI32();
+        if ftype == TType.DOUBLE:
+          self.num2 = iprot.readDouble();
         else:
           iprot.skip(ftype)
       else:
@@ -689,12 +845,12 @@ class mult_args:
       return
     oprot.writeStructBegin('mult_args')
     if self.num1 is not None:
-      oprot.writeFieldBegin('num1', TType.I32, 1)
-      oprot.writeI32(self.num1)
+      oprot.writeFieldBegin('num1', TType.DOUBLE, 1)
+      oprot.writeDouble(self.num1)
       oprot.writeFieldEnd()
     if self.num2 is not None:
-      oprot.writeFieldBegin('num2', TType.I32, 2)
-      oprot.writeI32(self.num2)
+      oprot.writeFieldBegin('num2', TType.DOUBLE, 2)
+      oprot.writeDouble(self.num2)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
@@ -721,7 +877,7 @@ class mult_result:
   """
 
   thrift_spec = (
-    (0, TType.I32, 'success', None, None, ), # 0
+    (0, TType.DOUBLE, 'success', None, None, ), # 0
   )
 
   def __init__(self, success=None,):
@@ -737,8 +893,8 @@ class mult_result:
       if ftype == TType.STOP:
         break
       if fid == 0:
-        if ftype == TType.I32:
-          self.success = iprot.readI32();
+        if ftype == TType.DOUBLE:
+          self.success = iprot.readDouble();
         else:
           iprot.skip(ftype)
       else:
@@ -752,8 +908,8 @@ class mult_result:
       return
     oprot.writeStructBegin('mult_result')
     if self.success is not None:
-      oprot.writeFieldBegin('success', TType.I32, 0)
-      oprot.writeI32(self.success)
+      oprot.writeFieldBegin('success', TType.DOUBLE, 0)
+      oprot.writeDouble(self.success)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
@@ -782,8 +938,8 @@ class div_args:
 
   thrift_spec = (
     None, # 0
-    (1, TType.I32, 'num1', None, None, ), # 1
-    (2, TType.I32, 'num2', None, None, ), # 2
+    (1, TType.DOUBLE, 'num1', None, None, ), # 1
+    (2, TType.DOUBLE, 'num2', None, None, ), # 2
   )
 
   def __init__(self, num1=None, num2=None,):
@@ -800,13 +956,13 @@ class div_args:
       if ftype == TType.STOP:
         break
       if fid == 1:
-        if ftype == TType.I32:
-          self.num1 = iprot.readI32();
+        if ftype == TType.DOUBLE:
+          self.num1 = iprot.readDouble();
         else:
           iprot.skip(ftype)
       elif fid == 2:
-        if ftype == TType.I32:
-          self.num2 = iprot.readI32();
+        if ftype == TType.DOUBLE:
+          self.num2 = iprot.readDouble();
         else:
           iprot.skip(ftype)
       else:
@@ -820,12 +976,12 @@ class div_args:
       return
     oprot.writeStructBegin('div_args')
     if self.num1 is not None:
-      oprot.writeFieldBegin('num1', TType.I32, 1)
-      oprot.writeI32(self.num1)
+      oprot.writeFieldBegin('num1', TType.DOUBLE, 1)
+      oprot.writeDouble(self.num1)
       oprot.writeFieldEnd()
     if self.num2 is not None:
-      oprot.writeFieldBegin('num2', TType.I32, 2)
-      oprot.writeI32(self.num2)
+      oprot.writeFieldBegin('num2', TType.DOUBLE, 2)
+      oprot.writeDouble(self.num2)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
@@ -852,7 +1008,7 @@ class div_result:
   """
 
   thrift_spec = (
-    (0, TType.I32, 'success', None, None, ), # 0
+    (0, TType.DOUBLE, 'success', None, None, ), # 0
   )
 
   def __init__(self, success=None,):
@@ -868,8 +1024,8 @@ class div_result:
       if ftype == TType.STOP:
         break
       if fid == 0:
-        if ftype == TType.I32:
-          self.success = iprot.readI32();
+        if ftype == TType.DOUBLE:
+          self.success = iprot.readDouble();
         else:
           iprot.skip(ftype)
       else:
@@ -883,8 +1039,465 @@ class div_result:
       return
     oprot.writeStructBegin('div_result')
     if self.success is not None:
-      oprot.writeFieldBegin('success', TType.I32, 0)
-      oprot.writeI32(self.success)
+      oprot.writeFieldBegin('success', TType.DOUBLE, 0)
+      oprot.writeDouble(self.success)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class sumVec_args:
+  """
+  Attributes:
+   - vec1
+   - vec2
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.LIST, 'vec1', (TType.DOUBLE,None), None, ), # 1
+    (2, TType.LIST, 'vec2', (TType.DOUBLE,None), None, ), # 2
+  )
+
+  def __init__(self, vec1=None, vec2=None,):
+    self.vec1 = vec1
+    self.vec2 = vec2
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.LIST:
+          self.vec1 = []
+          (_etype3, _size0) = iprot.readListBegin()
+          for _i4 in xrange(_size0):
+            _elem5 = iprot.readDouble();
+            self.vec1.append(_elem5)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.LIST:
+          self.vec2 = []
+          (_etype9, _size6) = iprot.readListBegin()
+          for _i10 in xrange(_size6):
+            _elem11 = iprot.readDouble();
+            self.vec2.append(_elem11)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('sumVec_args')
+    if self.vec1 is not None:
+      oprot.writeFieldBegin('vec1', TType.LIST, 1)
+      oprot.writeListBegin(TType.DOUBLE, len(self.vec1))
+      for iter12 in self.vec1:
+        oprot.writeDouble(iter12)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    if self.vec2 is not None:
+      oprot.writeFieldBegin('vec2', TType.LIST, 2)
+      oprot.writeListBegin(TType.DOUBLE, len(self.vec2))
+      for iter13 in self.vec2:
+        oprot.writeDouble(iter13)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class sumVec_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = (
+    (0, TType.LIST, 'success', (TType.DOUBLE,None), None, ), # 0
+  )
+
+  def __init__(self, success=None,):
+    self.success = success
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.LIST:
+          self.success = []
+          (_etype17, _size14) = iprot.readListBegin()
+          for _i18 in xrange(_size14):
+            _elem19 = iprot.readDouble();
+            self.success.append(_elem19)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('sumVec_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.LIST, 0)
+      oprot.writeListBegin(TType.DOUBLE, len(self.success))
+      for iter20 in self.success:
+        oprot.writeDouble(iter20)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class subVec_args:
+  """
+  Attributes:
+   - vec1
+   - vec2
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.LIST, 'vec1', (TType.DOUBLE,None), None, ), # 1
+    (2, TType.LIST, 'vec2', (TType.DOUBLE,None), None, ), # 2
+  )
+
+  def __init__(self, vec1=None, vec2=None,):
+    self.vec1 = vec1
+    self.vec2 = vec2
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.LIST:
+          self.vec1 = []
+          (_etype24, _size21) = iprot.readListBegin()
+          for _i25 in xrange(_size21):
+            _elem26 = iprot.readDouble();
+            self.vec1.append(_elem26)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.LIST:
+          self.vec2 = []
+          (_etype30, _size27) = iprot.readListBegin()
+          for _i31 in xrange(_size27):
+            _elem32 = iprot.readDouble();
+            self.vec2.append(_elem32)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('subVec_args')
+    if self.vec1 is not None:
+      oprot.writeFieldBegin('vec1', TType.LIST, 1)
+      oprot.writeListBegin(TType.DOUBLE, len(self.vec1))
+      for iter33 in self.vec1:
+        oprot.writeDouble(iter33)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    if self.vec2 is not None:
+      oprot.writeFieldBegin('vec2', TType.LIST, 2)
+      oprot.writeListBegin(TType.DOUBLE, len(self.vec2))
+      for iter34 in self.vec2:
+        oprot.writeDouble(iter34)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class subVec_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = (
+    (0, TType.LIST, 'success', (TType.DOUBLE,None), None, ), # 0
+  )
+
+  def __init__(self, success=None,):
+    self.success = success
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.LIST:
+          self.success = []
+          (_etype38, _size35) = iprot.readListBegin()
+          for _i39 in xrange(_size35):
+            _elem40 = iprot.readDouble();
+            self.success.append(_elem40)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('subVec_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.LIST, 0)
+      oprot.writeListBegin(TType.DOUBLE, len(self.success))
+      for iter41 in self.success:
+        oprot.writeDouble(iter41)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class escVec_args:
+  """
+  Attributes:
+   - vec1
+   - vec2
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.LIST, 'vec1', (TType.DOUBLE,None), None, ), # 1
+    (2, TType.LIST, 'vec2', (TType.DOUBLE,None), None, ), # 2
+  )
+
+  def __init__(self, vec1=None, vec2=None,):
+    self.vec1 = vec1
+    self.vec2 = vec2
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.LIST:
+          self.vec1 = []
+          (_etype45, _size42) = iprot.readListBegin()
+          for _i46 in xrange(_size42):
+            _elem47 = iprot.readDouble();
+            self.vec1.append(_elem47)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.LIST:
+          self.vec2 = []
+          (_etype51, _size48) = iprot.readListBegin()
+          for _i52 in xrange(_size48):
+            _elem53 = iprot.readDouble();
+            self.vec2.append(_elem53)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('escVec_args')
+    if self.vec1 is not None:
+      oprot.writeFieldBegin('vec1', TType.LIST, 1)
+      oprot.writeListBegin(TType.DOUBLE, len(self.vec1))
+      for iter54 in self.vec1:
+        oprot.writeDouble(iter54)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    if self.vec2 is not None:
+      oprot.writeFieldBegin('vec2', TType.LIST, 2)
+      oprot.writeListBegin(TType.DOUBLE, len(self.vec2))
+      for iter55 in self.vec2:
+        oprot.writeDouble(iter55)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class escVec_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = (
+    (0, TType.DOUBLE, 'success', None, None, ), # 0
+  )
+
+  def __init__(self, success=None,):
+    self.success = success
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.DOUBLE:
+          self.success = iprot.readDouble();
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('escVec_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.DOUBLE, 0)
+      oprot.writeDouble(self.success)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
