@@ -1,0 +1,66 @@
+type prioridad = enum{ALTA, BAJA};
+n: int          //Numero de clientes
+m: int          //Numero de réplicas
+replica: int    //Réplica asignada a un cliente
+pr: prioridad   //Prioridad asignada a un cliente
+
+//Canales de comunicación
+    chan token [1:m]();
+    chan solicitar [1:m]();
+    chan conceder [1:n]();
+    chan liberar [1:m]();
+
+//Clientes:
+Cliente[i:1..n](replica:1..m, pr:prioridad)::
+    do true →
+        //...
+        /*Enviamos una solicitud a la replica asignada al cliente,
+        *indicando el número de cliente y la prioridad */
+        send solicitar[replica](i, pr);
+        receive conceder[i]();
+        //Sección crítica
+        send liberar[replica]();
+        //Sección no crítica
+        //...
+    end
+
+//Réplicas
+Replica[j:1..m]()::
+    var HP: queue of int; //Cola de alta prioridad (High)
+    var LP: queue of int; //Cola de baja prioridad (Low)
+
+    do true →
+        //Mienrtas no se tenga el token...
+        if (empty(token[j])) →
+            //Si hay alguna petición...
+            if not (empty(solicitar[j])) →
+                receive solicitar[j](id, prioridad);
+                if prioridad == ALTA →
+                    HP.insert(id);
+                fi 
+                if prioridad == BAJA →
+                    LP.insert(id);
+                fi
+            fi
+        fi
+        //Si hay token que recibir...
+        if not (empty(token[j])) →
+            receive token[j]();
+            //Primero: procesos de alta prioridad
+            do not empty(HP)  →
+                id = HP.remove();
+                send conceder[id]();
+                receive liberar[j]();
+            end
+            //Procesos de baja prioridad
+            do not empty(LP)  →
+                id = HP.remove();
+                send conceder[id]();
+                receive liberar[j]();
+            end
+            //sleep ??
+
+            //Pasamos el token a la siguiente réplica
+            send token[(j mod m) + 1]();
+        fi
+    end
